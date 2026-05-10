@@ -14,6 +14,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -69,6 +70,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<GeneralResponse> handleBusiness(BusinessException ex) {
         HttpStatus status = httpStatusFor(ex.getResultCode());
         return respond(status, ex.getResultCode(), ex.getMessage());
+    }
+
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<GeneralResponse> handleOptimisticLock(ObjectOptimisticLockingFailureException ex) {
+        log.warn("Optimistic locking conflict: {}", ex.getMessage());
+        return respond(HttpStatus.CONFLICT, ResultCode.BUSINESS_CONFLICT, "Concurrent update conflict");
     }
 
     @ExceptionHandler(Exception.class)

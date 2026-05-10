@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.exequt.ExeQutApplicationTests" time="7.793" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.exequt.payment.PaymentFlowIntegrationTest" time="2.038" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -51,7 +51,7 @@
     <property name="localRepository" value="C:\Users\A.Shlool\.m2\repository"/>
     <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
     <property name="java.io.tmpdir" value="C:\Users\A5D88~1.SHL\AppData\Local\Temp\"/>
-    <property name="com.zaxxer.hikari.pool_number" value="1"/>
+    <property name="com.zaxxer.hikari.pool_number" value="2"/>
     <property name="java.version" value="17.0.12"/>
     <property name="user.dir" value="F:\Git\exequt-cart-checkout-system"/>
     <property name="os.arch" value="amd64"/>
@@ -70,9 +70,9 @@
     <property name="java.class.version" value="61.0"/>
     <property name="LOGGED_APPLICATION_NAME" value="[exequt-cart-checkout] "/>
   </properties>
-  <testcase name="contextLoads" classname="com.exequt.ExeQutApplicationTests" time="0.699">
-    <system-out><![CDATA[02:26:53.695 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.exequt.ExeQutApplicationTests]: ExeQutApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-02:26:53.828 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.exequt.ExeQutApplication for test class com.exequt.ExeQutApplicationTests
+  <testcase name="conflictingWebhook_afterTerminal_isIgnored" classname="com.exequt.payment.PaymentFlowIntegrationTest" time="0.751">
+    <system-out><![CDATA[2026-05-11T02:27:01.338+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.exequt.payment.PaymentFlowIntegrationTest]: PaymentFlowIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-11T02:27:01.349+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.exequt.ExeQutApplication for test class com.exequt.payment.PaymentFlowIntegrationTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -82,24 +82,70 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::               (v3.2.12)
 
-2026-05-11T02:26:54.506+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.ExeQutApplicationTests        : Starting ExeQutApplicationTests using Java 17.0.12 with PID 44768 (started by A.Shlool in F:\Git\exequt-cart-checkout-system)
-2026-05-11T02:26:54.509+03:00 DEBUG 44768 --- [exequt-cart-checkout] [           main] com.exequt.ExeQutApplicationTests        : Running with Spring Boot v3.2.12, Spring v6.1.15
-2026-05-11T02:26:54.509+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.ExeQutApplicationTests        : No active profile set, falling back to 1 default profile: "default"
-2026-05-11T02:26:55.665+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-11T02:26:55.797+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 106 ms. Found 4 JPA repository interfaces.
-2026-05-11T02:26:56.527+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-05-11T02:26:56.821+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:exequt user=SA
-2026-05-11T02:26:56.821+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-05-11T02:26:57.107+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-05-11T02:26:57.166+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.10.Final
-2026-05-11T02:26:57.188+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-05-11T02:26:57.409+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-05-11T02:26:57.449+03:00  WARN 44768 --- [exequt-cart-checkout] [           main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-05-11T02:26:58.275+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-05-11T02:26:58.287+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-11T02:26:58.783+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-05-11T02:27:00.485+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:exequt'
-2026-05-11T02:27:00.577+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.ExeQutApplicationTests        : Started ExeQutApplicationTests in 6.51 seconds (process running for 11.146)
+2026-05-11T02:27:01.400+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.payment.PaymentFlowIntegrationTest   : Starting PaymentFlowIntegrationTest using Java 17.0.12 with PID 44768 (started by A.Shlool in F:\Git\exequt-cart-checkout-system)
+2026-05-11T02:27:01.400+03:00 DEBUG 44768 --- [exequt-cart-checkout] [           main] c.e.payment.PaymentFlowIntegrationTest   : Running with Spring Boot v3.2.12, Spring v6.1.15
+2026-05-11T02:27:01.400+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.payment.PaymentFlowIntegrationTest   : No active profile set, falling back to 1 default profile: "default"
+2026-05-11T02:27:01.581+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-11T02:27:01.603+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 20 ms. Found 4 JPA repository interfaces.
+2026-05-11T02:27:01.686+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-05-11T02:27:01.686+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:exequt user=SA
+2026-05-11T02:27:01.686+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-05-11T02:27:01.747+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-11T02:27:01.747+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-05-11T02:27:01.747+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-11T02:27:01.747+03:00  WARN 44768 --- [exequt-cart-checkout] [           main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-11T02:27:01.943+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-11T02:27:01.943+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-11T02:27:02.175+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:exequt'
+2026-05-11T02:27:02.231+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-05-11T02:27:02.231+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-05-11T02:27:02.231+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-05-11T02:27:02.231+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.payment.PaymentFlowIntegrationTest   : Started PaymentFlowIntegrationTest in 0.859 seconds (process running for 12.812)
+2026-05-11T02:27:02.428+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Creating new cart
+2026-05-11T02:27:02.659+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Adding item to cart cartId=1 productId=SKU-E
+2026-05-11T02:27:02.738+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Checkout requested cartId=1
+2026-05-11T02:27:02.828+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.payment.api.OrderPaymentController   : Payment start requested orderId=1
+2026-05-11T02:27:02.888+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.p.api.PaymentWebhookController       : Payment webhook received providerEventId=evt-conf-e4d35c64-d688-4067-9c15-e0fab932ce13 paymentAttemptId=1
+2026-05-11T02:27:02.920+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.p.api.PaymentWebhookController       : Payment webhook received providerEventId=evt-conflict-6c5f2aca-0290-43da-8b55-2b295fb3b994 paymentAttemptId=1
+2026-05-11T02:27:02.999+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.order.api.OrderController     : Fetching order orderId=1
+]]></system-out>
+  </testcase>
+  <testcase name="successfulPayment_confirmsOrder" classname="com.exequt.payment.PaymentFlowIntegrationTest" time="0.068">
+    <system-out><![CDATA[2026-05-11T02:27:03.017+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Creating new cart
+2026-05-11T02:27:03.032+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Adding item to cart cartId=2 productId=SKU-A
+2026-05-11T02:27:03.032+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Checkout requested cartId=2
+2026-05-11T02:27:03.048+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.payment.api.OrderPaymentController   : Payment start requested orderId=2
+2026-05-11T02:27:03.063+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.p.api.PaymentWebhookController       : Payment webhook received providerEventId=evt-fa4751a6-6b26-456c-a007-369f7bfaf5d2 paymentAttemptId=2
+2026-05-11T02:27:03.066+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.order.api.OrderController     : Fetching order orderId=2
+]]></system-out>
+  </testcase>
+  <testcase name="failedPayment_retryThenSuccess" classname="com.exequt.payment.PaymentFlowIntegrationTest" time="0.143">
+    <system-out><![CDATA[2026-05-11T02:27:03.086+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Creating new cart
+2026-05-11T02:27:03.098+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Adding item to cart cartId=3 productId=SKU-B
+2026-05-11T02:27:03.099+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Checkout requested cartId=3
+2026-05-11T02:27:03.119+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.payment.api.OrderPaymentController   : Payment start requested orderId=3
+2026-05-11T02:27:03.137+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.p.api.PaymentWebhookController       : Payment webhook received providerEventId=evt-fail-dc0112eb-c6ec-4bc1-953c-f8886d98e56b paymentAttemptId=3
+2026-05-11T02:27:03.154+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.order.api.OrderController     : Fetching order orderId=3
+2026-05-11T02:27:03.164+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.payment.api.OrderPaymentController   : Payment start requested orderId=3
+2026-05-11T02:27:03.199+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.p.api.PaymentWebhookController       : Payment webhook received providerEventId=evt-ok-d46f7852-4596-4fc5-bf65-365e3e2ddea4 paymentAttemptId=4
+2026-05-11T02:27:03.221+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.order.api.OrderController     : Fetching order orderId=3
+]]></system-out>
+  </testcase>
+  <testcase name="duplicatePaymentStart_returnsExistingInitiatedAttempt" classname="com.exequt.payment.PaymentFlowIntegrationTest" time="0.07">
+    <system-out><![CDATA[2026-05-11T02:27:03.229+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Creating new cart
+2026-05-11T02:27:03.232+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Adding item to cart cartId=4 productId=SKU-D
+2026-05-11T02:27:03.249+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Checkout requested cartId=4
+2026-05-11T02:27:03.264+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.payment.api.OrderPaymentController   : Payment start requested orderId=4
+2026-05-11T02:27:03.280+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.payment.api.OrderPaymentController   : Payment start requested orderId=4
+]]></system-out>
+  </testcase>
+  <testcase name="duplicateWebhook_isIdempotent" classname="com.exequt.payment.PaymentFlowIntegrationTest" time="0.066">
+    <system-out><![CDATA[2026-05-11T02:27:03.297+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Creating new cart
+2026-05-11T02:27:03.314+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Adding item to cart cartId=5 productId=SKU-C
+2026-05-11T02:27:03.314+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] com.exequt.cart.api.CartController       : Checkout requested cartId=5
+2026-05-11T02:27:03.330+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.payment.api.OrderPaymentController   : Payment start requested orderId=5
+2026-05-11T02:27:03.331+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.p.api.PaymentWebhookController       : Payment webhook received providerEventId=evt-dup-9c30b35b-1716-4bf8-bd1d-e55000778a20 paymentAttemptId=6
+2026-05-11T02:27:03.347+03:00  INFO 44768 --- [exequt-cart-checkout] [           main] c.e.p.api.PaymentWebhookController       : Payment webhook received providerEventId=evt-dup-9c30b35b-1716-4bf8-bd1d-e55000778a20 paymentAttemptId=6
 ]]></system-out>
   </testcase>
 </testsuite>
