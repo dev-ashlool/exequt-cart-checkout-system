@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.exequt.payment.PaymentFlowIntegrationTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.038 s -- in com.exequt.payment.PaymentFlowIntegrationTest
