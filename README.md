@@ -192,11 +192,11 @@ Payment logic lives under **`com.exequt.payment`**. Order updates go only throug
 
 ### Payment flow summary
 
-1. **Payment start:** order must be payable (**CREATED** or **PAYMENT_FAILED**). If an active **INITIATED** attempt already exists, the existing attempt is returned with **200 OK**. Otherwise, the service locks the order row, transitions the order to **PENDING_PAYMENT**, and creates a new **INITIATED** **`PaymentAttempt`** (amount matches order total; mock **`providerReference`**).2. **INITIATED attempt:** only **INITIATED** attempts accept a terminal webhook; **`confirm()`** / **`fail()`** move the attempt to **CONFIRMED** / **FAILED** (terminal, immutable thereafter).
+1. **Payment start:** order must be payable (**CREATED** or **PAYMENT_FAILED**). If an active **INITIATED** attempt already exists, the existing attempt is returned with **200 OK**. Otherwise, the service locks the order row, transitions the order to **PENDING_PAYMENT**, and creates a new **INITIATED** **`PaymentAttempt`** (amount matches order total; mock **`providerReference`**).
+2. **INITIATED attempt:** only **INITIATED** attempts accept a terminal webhook; **`confirm()`** / **`fail()`** move the attempt to **CONFIRMED** / **FAILED** (terminal, immutable thereafter).
 3. **Webhook handling:** **CONFIRMED** calls **`markOrderAsPaid`** → order **PAID**; **FAILED** calls **`markOrderPaymentFailed`** → order **PAYMENT_FAILED** (only from **PENDING_PAYMENT**).
-4. **Retry:** when the order is **PAYMENT_FAILED**, a new **payment start** creates a **new** attempt and moves the order back to **PENDING_PAYMENT**; older attempts stay unchanged.
-5. **PAID** is **final**; no further order or attempt mutations from payment paths.
-
+4. **Retry:** when the order is **PAYMENT_FAILED**, a new payment start creates a new attempt and moves the order back to **PENDING_PAYMENT**; older attempts stay unchanged.
+5. **PAID** is final; no further order or attempt mutations from payment paths.
 ### Webhook idempotency
 
 - **Duplicate `providerEventId`:** a second delivery with the same id returns **HTTP 200** with **`processingResult: DUPLICATE`** and does **not** change order or attempt state again.
