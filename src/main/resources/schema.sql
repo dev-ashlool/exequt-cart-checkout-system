@@ -1,0 +1,1 @@
+-- DDL for cart, order, and payment modules will be added in later phases.
