@@ -4,7 +4,10 @@ import com.exequt.cart.api.dto.AddCartItemRequest;
 import com.exequt.cart.api.dto.CartResponse;
 import com.exequt.cart.api.dto.CreateCartResponse;
 import com.exequt.cart.application.CartApplicationService;
+import com.exequt.cart.application.CheckoutApplicationService;
+import com.exequt.cart.application.CheckoutResult;
 import com.exequt.common.response.GenericResponse;
+import com.exequt.order.api.dto.OrderResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import org.slf4j.Logger;
@@ -26,9 +29,12 @@ public class CartController {
     private static final Logger log = LoggerFactory.getLogger(CartController.class);
 
     private final CartApplicationService cartApplicationService;
+    private final CheckoutApplicationService checkoutApplicationService;
 
-    public CartController(CartApplicationService cartApplicationService) {
+    public CartController(
+            CartApplicationService cartApplicationService, CheckoutApplicationService checkoutApplicationService) {
         this.cartApplicationService = cartApplicationService;
+        this.checkoutApplicationService = checkoutApplicationService;
     }
 
     @PostMapping
@@ -52,5 +58,16 @@ public class CartController {
         log.info("Fetching cart cartId={}", cartId);
         CartResponse body = cartApplicationService.getCart(cartId);
         return ResponseEntity.ok(GenericResponse.success(body));
+    }
+
+    @PostMapping("/{cartId}/checkout")
+    public ResponseEntity<GenericResponse<OrderResponse>> checkout(@PathVariable Long cartId) {
+        log.info("Checkout requested cartId={}", cartId);
+        CheckoutResult result = checkoutApplicationService.checkout(cartId);
+        GenericResponse<OrderResponse> body = GenericResponse.success(result.getOrder());
+        if (result.isCreated()) {
+            return ResponseEntity.created(URI.create("/orders/" + result.getOrder().getId())).body(body);
+        }
+        return ResponseEntity.ok(body);
     }
 }
