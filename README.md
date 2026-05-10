@@ -24,7 +24,8 @@ See [docs/architecture-decisions.md](docs/architecture-decisions.md) for full pr
 | Boilerplate | Lombok |
 | Tests | JUnit 5, Spring Boot Test |
 
-SQL scripts on the classpath: `schema.sql` (cart + order tables in Phases 2–3), `data.sql` (optional seed data in later phases).
+SQL scripts on the classpath: `schema.sql` (cart, order, and payment tables), `data.sql` (optional seed data in later phases).
+
 ## Package structure
 
 ```text
@@ -66,13 +67,17 @@ com.exequt
 
 ## Run
 
-```bash
-mvn spring-boot:run
+Use the **Maven Wrapper** (no local Maven installation required):
+
+```powershell
+.\mvnw.cmd clean test
 ```
 
-```bash
-mvn test
+```powershell
+.\mvnw.cmd spring-boot:run
 ```
+
+On Unix/macOS use `./mvnw` with the same goals. If Maven is installed globally, `mvn test` and `mvn spring-boot:run` are equivalent.
 
 ## Implementation phases
 
@@ -173,6 +178,41 @@ Checkout creates orders in **CREATED** only; **payment** endpoints and **`startP
 ### Domain behaviour (cart)
 
 - **`checkout()`** on the cart aggregate sets status to **CHECKED_OUT** and is invoked from the checkout application service after the order is persisted.
+
+## Payment module (Phase 4)
+
+Payment logic lives under **`com.exequt.payment`**. Order updates go only through **`OrderCommandService`** (no `OrderRepository` in payment).
+
+### Payment APIs
+
+| Method | Path | Notes |
+|--------|------|--------|
+| **POST** | `/orders/{orderId}/payment/start` | Starts or resumes payment for an order; returns **`GenericResponse<PaymentAttemptResponse>`**. **201 Created** when a new **`INITIATED`** attempt is created (with `Location` hinting at the attempt); **200 OK** when an active **`INITIATED`** attempt already exists for that order. |
+| **POST** | `/payments/mock-provider/webhook` | Mock provider callback; body includes `providerEventId`, `paymentAttemptId`, `status` (**CONFIRMED** or **FAILED**), and `amount`. Returns **`GenericResponse<WebhookResponse>`** with a **`processingResult`** (`PROCESSED`, `DUPLICATE`, `IGNORED`, or `REJECTED`). |
+
+### Payment flow summary
+
+1. **Payment start:** order must be payable (**CREATED** or **PAYMENT_FAILED**, or already **PENDING_PAYMENT** with no active attempt). The service locks the order row, ensures **PENDING_PAYMENT** when transitioning from **CREATED** / **PAYMENT_FAILED**, then creates or reuses a single **INITIATED** **`PaymentAttempt`** (amount matches order total; mock **`providerReference`**).
+2. **INITIATED attempt:** only **INITIATED** attempts accept a terminal webhook; **`confirm()`** / **`fail()`** move the attempt to **CONFIRMED** / **FAILED** (terminal, immutable thereafter).
+3. **Webhook handling:** **CONFIRMED** calls **`markOrderAsPaid`** → order **PAID**; **FAILED** calls **`markOrderPaymentFailed`** → order **PAYMENT_FAILED** (only from **PENDING_PAYMENT**).
+4. **Retry:** when the order is **PAYMENT_FAILED**, a new **payment start** creates a **new** attempt and moves the order back to **PENDING_PAYMENT**; older attempts stay unchanged.
+5. **PAID** is **final**; no further order or attempt mutations from payment paths.
+
+### Webhook idempotency
+
+- **Duplicate `providerEventId`:** a second delivery with the same id returns **HTTP 200** with **`processingResult: DUPLICATE`** and does **not** change order or attempt state again.
+- **First terminal result wins:** the first **CONFIRMED** or **FAILED** webhook for an **INITIATED** attempt applies; later terminal payloads for the same attempt are stored for audit with **`IGNORED`** and do **not** mutate order or attempt.
+- **Conflicting late events:** after an attempt is already **CONFIRMED** or **FAILED**, an opposite-status webhook is still accepted as **HTTP 200** but recorded as **`IGNORED`** (no business rollback).
+
+### Payment integration tests
+
+`PaymentFlowIntegrationTest` (MockMvc, full context) covers:
+
+- Successful payment (start → **CONFIRMED** webhook → order **PAID**)
+- Failed payment, retry, then success
+- Duplicate webhook (**same `providerEventId`**)
+- Duplicate payment start (returns existing **INITIATED** attempt)
+- Conflicting webhook after a terminal result (**IGNORED**)
 
 ## API error model
 
