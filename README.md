@@ -24,7 +24,7 @@ See [docs/architecture-decisions.md](docs/architecture-decisions.md) for full pr
 | Boilerplate | Lombok |
 | Tests | JUnit 5, Spring Boot Test |
 
-SQL scripts on the classpath: `schema.sql`, `data.sql` (placeholders in Phase 1; real DDL/DML in later phases).
+SQL scripts on the classpath: `schema.sql` (cart tables in Phase 2), `data.sql` (optional seed data in later phases).
 
 ## Package structure
 
@@ -61,7 +61,7 @@ com.exequt
 
 - **Application name:** `exequt-cart-checkout` (`spring.application.name`).
 - **H2:** in-memory database, console enabled at `/h2-console`.
-- **JPA:** Hibernate DDL set to `none` until domain entities are introduced; dialect H2; `open-in-view: false`.
+- **JPA:** Hibernate DDL `none` (tables come from `schema.sql`); dialect H2; `open-in-view: false`.
 - **SQL init:** enabled so `schema.sql` / `data.sql` run on startup.
 - **Logging:** `INFO` root, `DEBUG` for `com.exequt`.
 
@@ -80,12 +80,54 @@ mvn test
 | Phase | Scope |
 |-------|--------|
 | **1** | Project foundation: Maven, packages, `common` response model and exception handling, H2/JPA config, placeholder SQL, README. |
-| **2** | Cart module (API, application, domain, persistence). |
+| **2** | Cart module: create cart, add/list items, domain rules (complete). Checkout API deferred to a later phase. |
 | **3** | Order module and state machine. |
 | **4** | Payment module, mock provider, webhooks and idempotency. |
 | **5** | Tests, README updates, cleanup. |
 
-Phase 1 stops here; further phases are implemented after review.
+Further phases are implemented after review.
+
+## Cart APIs (Phase 2)
+
+Base URL (default): `http://localhost:8080`
+
+All success bodies use `GenericResponse<T>`: `error`, `statusCode`, `description`, and `data`.
+
+### Create cart
+
+`POST /carts` → **201 Created** with `Location: /carts/{id}` and `data` of type **CreateCartResponse** (new empty cart: `OPEN`, empty `items`).
+
+```bash
+curl -s -D - -X POST http://localhost:8080/carts -o -
+```
+
+### Add item
+
+`POST /carts/{cartId}/items` → **200 OK**, `data` is **CartResponse** (full cart including line items).
+
+- If the same `productId` already exists, **quantity is increased** and the line is repriced to the incoming `price`.
+
+```bash
+curl -s -X POST http://localhost:8080/carts/1/items \
+  -H "Content-Type: application/json" \
+  -d "{\"productId\":\"SKU-100\",\"quantity\":2,\"price\":19.99}"
+```
+
+### Get cart
+
+`GET /carts/{cartId}` → **200 OK**, `data` is **CartResponse**.
+
+```bash
+curl -s http://localhost:8080/carts/1
+```
+
+### Validation (request body)
+
+`AddCartItemRequest`: `productId` required (non-blank string); `quantity` and `price` required and **positive** (`@Positive`).
+
+### Domain behaviour (not exposed as endpoints yet)
+
+- **`checkout()`** on the cart aggregate sets status to **CHECKED_OUT** (locks the cart for a future checkout flow). There is **no** checkout HTTP endpoint in Phase 2.
 
 ## API error model
 
