@@ -5,7 +5,7 @@ Backend service for a small e-commerce flow: create a cart, add items, checkout 
 ## Architecture
 
 - **Style:** single deployable **modular monolith** with **package-by-feature** boundaries (`cart`, `order`, `payment`, `common`).
-- **Inside each feature:** layered packages — `api` (controllers), `api.dto` (API contracts), `application` (orchestration and transactions), `domain` (model and invariants), `persistence` (JPA and repositories).
+- **Inside each feature:** layered packages  `api` (controllers), `api.dto` (API contracts), `application` (orchestration and transactions), `domain` (model and invariants), `persistence` (JPA and repositories).
 - **Common:** shared technical concerns only (response wrappers, result codes, exceptions, global exception handler). No business rules in `common`.
 
 See [docs/architecture-decisions.md](docs/architecture-decisions.md) for full principles and module ownership rules.
@@ -131,14 +131,14 @@ curl -s http://localhost:8080/carts/1
 
 ### Checkout (Phase 3)
 
-`POST /carts/{cartId}/checkout` — creates an **order** from the cart, copies lines as immutable **order item** snapshots, computes **totalAmount**, locks the cart (**CHECKED_OUT**), and returns **`GenericResponse<OrderResponse>`**.
+`POST /carts/{cartId}/checkout`  creates an **order** from the cart, copies lines as immutable **order item** snapshots, computes **totalAmount**, locks the cart (**CHECKED_OUT**), and returns **`GenericResponse<OrderResponse>`**.
 
 | Outcome | HTTP | Notes |
 |--------|------|--------|
 | First successful checkout | **201 Created** | `Location: /orders/{orderId}` |
 | Duplicate / retry checkout for the same cart | **200 OK** | Same order as the first checkout; **no second order** (DB `UNIQUE` on `orders.cart_id` + cart row lock) |
 
-Flow (orchestrated in **`CheckoutApplicationService`**, boundary via **`OrderCommandService`** — cart code does **not** use **`OrderRepository`**):
+Flow (orchestrated in **`CheckoutApplicationService`**, boundary via **`OrderCommandService`**  cart code does **not** use **`OrderRepository`**):
 
 The checkout flow is intentionally idempotent.
 
