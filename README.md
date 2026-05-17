@@ -8,6 +8,10 @@ Backend service for a small e-commerce flow: create a cart, add items, checkout 
 - **Inside each feature:** layered packages  `api` (controllers), `api.dto` (API contracts), `application` (orchestration and transactions), `domain` (model and invariants), `persistence` (JPA and repositories).
 - **Common:** shared technical concerns only (response wrappers, result codes, exceptions, global exception handler). No business rules in `common`.
 
+## High-Level Architecture Diagram
+
+![Architecture Diagram](docs/diagrams/System Architecture & Module Boundaries.jpg)
+
 See [docs/architecture-decisions.md](docs/architecture-decisions.md) for full principles and module ownership rules.
 
 ## Technology stack
