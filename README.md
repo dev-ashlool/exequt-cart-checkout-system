@@ -12,6 +12,10 @@ Backend service for a small e-commerce flow: create a cart, add items, checkout 
 
 ![Architecture Diagram](docs/diagrams/system-architecture-module-boundaries.jpg)
 
+## Database Entity Relationship Diagram (ERD)
+
+![Database ERD](docs/diagrams/database-erd.png)
+
 See [docs/architecture-decisions.md](docs/architecture-decisions.md) for full principles and module ownership rules.
 
 ## Technology stack
