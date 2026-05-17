@@ -73,6 +73,7 @@ public PaymentStartResult startPayment(Long orderId) {
             throw new BusinessException(ResultCode.BAD_REQUEST, "providerEventId is required");
         }
 
+        //Check-then-lock
         if (paymentWebhookEventRepository.existsByProviderEventId(providerEventId)) {
             return WebhookResponse.duplicate();
         }
@@ -81,13 +82,14 @@ public PaymentStartResult startPayment(Long orderId) {
                 .findByIdForUpdate(request.getPaymentAttemptId())
                 .orElseThrow(() -> new NotFoundException("Payment attempt not found"));
 
+        //Double-checked idempotency validation
         if (paymentWebhookEventRepository.existsByProviderEventId(providerEventId)) {
             return WebhookResponse.duplicate();
         }
 
         BigDecimal webhookAmount = request.getAmount().setScale(MONEY_SCALE, RoundingMode.HALF_UP);
         if (attempt.getAmount().compareTo(webhookAmount) != 0) {
-            PaymentWebhookEvent rejected = PaymentWebhookEvent.record(
+            PaymentWebhookEvent rejected = PaymentWebhookEvent.recordEvent(
                     providerEventId,
                     attempt.getId(),
                     request.getStatus().name(),
@@ -100,7 +102,7 @@ public PaymentStartResult startPayment(Long orderId) {
         WebhookProviderStatus terminal = request.getStatus();
 
         if (attempt.isCompleted()) {
-            PaymentWebhookEvent ignored = PaymentWebhookEvent.record(
+            PaymentWebhookEvent ignored = PaymentWebhookEvent.recordEvent(
                     providerEventId,
                     attempt.getId(),
                     terminal.name(),
@@ -119,7 +121,7 @@ public PaymentStartResult startPayment(Long orderId) {
         }
         paymentAttemptRepository.save(attempt);
 
-        PaymentWebhookEvent processed = PaymentWebhookEvent.record(
+        PaymentWebhookEvent processed = PaymentWebhookEvent.recordEvent(
                 providerEventId,
                 attempt.getId(),
                 terminal.name(),

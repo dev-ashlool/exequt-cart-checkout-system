@@ -49,7 +49,7 @@ public class PaymentWebhookEvent {
     @Column(name = "received_at", nullable = false)
     private LocalDateTime receivedAt;
 
-    public static PaymentWebhookEvent record(
+    public static PaymentWebhookEvent recordEvent(
             String providerEventId,
             Long paymentAttemptId,
             String webhookStatus,
