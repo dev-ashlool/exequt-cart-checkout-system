@@ -164,6 +164,10 @@ curl -s -D - -X POST http://localhost:8080/carts/1/checkout -o -
 curl -s http://localhost:8080/orders/1
 ```
 
+## Order State Machine
+
+![Order State Machine](docs/diagrams/order-state-machine-payment-safety.jpg)
+
 ### Order status machine (domain)
 
 States: **CREATED** → **PENDING_PAYMENT** → **PAID** (success) or **PAYMENT_FAILED**; **PAYMENT_FAILED** → **PENDING_PAYMENT** again via **`startPayment()`**. **PAID** is terminal (further transitions throw **`ConflictException`**).
@@ -182,6 +186,10 @@ Checkout creates orders in **CREATED** only; **payment** endpoints and **`startP
 ### Domain behaviour (cart)
 
 - **`checkout()`** on the cart aggregate sets status to **CHECKED_OUT** and is invoked from the checkout application service after the order is persisted.
+
+## Payment & Webhook Processing Flow
+
+![Payment Flow](docs/diagrams/payment-flow-webhook-processing.jpg)
 
 ## Payment module (Phase 4)
 
