@@ -60,6 +60,25 @@ com.exequt
     ├── constants
     └── util
 ```
+## Architectural Trade-offs
+
+### Why Modular Monolith instead of Microservices?
+- The assignment scope is relatively small and does not require distributed infrastructure.
+- A modular monolith keeps deployment and debugging simple while preserving future service boundaries.
+- Package-by-feature organization keeps ownership explicit and supports future extraction into microservices.
+
+### Why H2?
+- H2 simplifies local execution and reviewer setup.
+- The persistence model remains relational and production-friendly.
+
+### Why Pessimistic Locking on Checkout?
+- Checkout correctness is critical.
+- `PESSIMISTIC_WRITE` serializes concurrent checkout attempts on the same cart and prevents duplicate order creation.
+
+### Why Explicit PaymentAttempt and WebhookEvent Models?
+- They separate payment execution concerns from order lifecycle concerns.
+- They enable safe retries, auditability, and webhook idempotency.
+
 
 ## Configuration
 
@@ -224,6 +243,28 @@ Payment logic lives under **`com.exequt.payment`**. Order updates go only throug
 - Duplicate webhook (**same `providerEventId`**)
 - Duplicate payment start (returns existing **INITIATED** attempt)
 - Conflicting webhook after a terminal result (**IGNORED**)
+
+## Core Business Invariants
+
+- A cart cannot be modified after checkout.
+- Empty carts cannot be checked out.
+- Checkout must not create duplicate orders.
+- Order item snapshots are immutable after checkout.
+- Only one active `INITIATED` payment attempt is allowed per order.
+- Completed payment attempts are immutable.
+- Duplicate webhooks must not apply state transitions twice.
+- The first terminal payment result wins.
+- `PAID` is a final and immutable order state.
+
+## Future Improvements
+
+- Refund and cancellation support.
+- PostgreSQL migration for production environments.
+- Partial unique indexes for active payment attempts.
+- Transactional outbox pattern for async integrations.
+- Event-driven communication if modules are extracted into microservices.
+- Inventory and stock reservation flows.
+- Authentication and authorization.
 
 ## API error model
 
