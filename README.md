@@ -10,7 +10,7 @@ Backend service for a small e-commerce flow: create a cart, add items, checkout 
 
 ## High-Level Architecture Diagram
 
-![Architecture Diagram](docs/diagrams/System Architecture & Module Boundaries.jpg)
+![Architecture Diagram](docs/diagrams/system-architecture-module-boundaries.jpg)
 
 See [docs/architecture-decisions.md](docs/architecture-decisions.md) for full principles and module ownership rules.
 
